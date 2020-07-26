@@ -19,7 +19,7 @@ public class UserController {
         return userService.findAll();
     }
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @RequestMapping(value = "/save", method = RequestMethod.PUT)
     public User create(@RequestBody User user){
         return userService.save(user);
     }

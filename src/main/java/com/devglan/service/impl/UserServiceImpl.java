@@ -28,23 +28,23 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	@Autowired
 	private PasswordEncoder encoder;
 
-//	private  User user2;
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
 		User user = userDao.findByUsername(userId);
-		if(user == null){
-			throw new UsernameNotFoundException("Invalid username or password.");
+		
+		if(user==null){
+			throw new UsernameNotFoundException("the user is not found");
+		}else{
+
+			String role = user.getRole();
+			List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+			authorities.add(new SimpleGrantedAuthority(role));
+
+
+
+			return new org.springframework.security.core.userdetails.User(user.getUsername(),encoder.encode(user.getPassword()), authorities);
+
 		}
-
-		return new org.springframework.security.core.userdetails.User(user.getUsername(), encoder.encode(user.getPassword()), getAuthority());
 	}
-
-	private List<SimpleGrantedAuthority> getAuthority() {
-		return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
-	}
-
-//	private List<SimpleGrantedAuthority> getAuthority() {
-//		return Arrays.asList(new SimpleGrantedAuthority(user2.getRole()));
-//	}
 
 
 	public List<User> findAll() {
